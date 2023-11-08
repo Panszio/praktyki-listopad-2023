@@ -45,11 +45,12 @@ class Snake:
         self.dirny = 1
 
     def move(self):
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
 
-        keys = pygame.key.get_pressed()
+            keys = pygame.key.get_pressed()
         if keys[pygame.K_LEFT]:
             self.dirnx = -1
             self.dirny = 0
@@ -80,9 +81,9 @@ class Snake:
                      c.pos = (c.rows - 1, c.pos[1])
                  elif c.dirnx == 1 and c.pos[0] >= c.rows - 1:
                     c.pos = (0, c.pos[1])
-                 elif c.dirny == 1 and c.pos[0] >= c.rows - 1:
+                 elif c.dirnx == 1 and c.pos[0] >= c.rows - 1:
                      c.pos = (c.pos[0], 0)
-                 elif c.dirny == -1 and c.pos[1] <= 0:
+                 elif c.dirnx == -1 and c.pos[1] <= 0:
                      c.pos = (c.pos[0], c.rows -1)
                  else:
                      c.move(c.dirnx, c.dirny)
@@ -111,13 +112,8 @@ class Snake:
             self.body[-1].dirny = dy
 
     def draw(self, surface):
-        for i, c in  enumerate (self.body):
-            if i == 0:
-                c.draw(surface, True)
-            else:
-                c.draw(surface)
-
-
+        for c in self.body:
+            c.draw(surface, c == self.body[0])
 
 
 def draw_grid(w, rows, surface):
@@ -142,15 +138,13 @@ def draw_window(surface):
 
 def random_apple(snake):
     positions = snake.body
-
     while True:
         x = random.randrange(rows)
         y = random.randrange(rows)
         if len(list(filter(lambda z: z.pos == (x, y), positions))) > 0:
             continue
         else:
-            return (x, y)
-
+            return x, y
 
 
 def main():
@@ -166,15 +160,13 @@ def main():
     clock = pygame.time.Clock()
 
     while flag:
-        pygame.time.delay(50)
+        pygame.time.delay(10)
         clock.tick(10)
         s.move()
         if s.body[0].pos == apple.pos:
-            s.add_cube(1)
+            s.add_cube()
             apple = Cube(random_apple(s), color=(255, 0, 0))
 
         draw_window(window)
-
-
 
 main()

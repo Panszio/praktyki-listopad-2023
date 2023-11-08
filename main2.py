@@ -10,7 +10,6 @@ BODY_PARTS = 3
 SNAKE_COLOR = "#00FF00"
 FOOD_COLOR = "#FF0000"
 BACKGROUND_COLOR = "#0000FF"
-clock = pygame.time.Clock()
 
 
 class Snake:
@@ -161,5 +160,5 @@ snake = Snake()
 food = Food()
 
 next_turn(snake, food)
-clock.tick(500)
+
 window.mainloop()
