@@ -40,10 +40,9 @@ class MAIN_GAME:
             self.snake.add_block()
 
     def check_fail(self):
+        # jeżeli snake 0 wyjdzie z okna gra się wyłączy
         if not 0 <= self.snake.body[0].x < self.cell_number or not 0 <= self.snake.body[0].y < self.cell_number:
-            for block in self.snake.body[1:]:
-                if block == self.snake.body[0]:
-                    self.game_over()
+            self.game_over()
 
     def game_over(self):
         pygame.quit()
