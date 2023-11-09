@@ -15,10 +15,11 @@ class SNAKE:
             pygame.draw.rect(screen,(183,111,122),block_rect)
 
     def move_snake(self):
-        if self.add_block == True:
+        if self.new_block == True:
             body_copy = self.body[:]
             body_copy.insert(0,body_copy[0] + self.direction)
             self.body = body_copy[:]
+            self.new_block = False
         else:
             body_copy = self.body[:-1]
             body_copy.insert(0, body_copy[0] + self.direction)
@@ -30,22 +31,38 @@ class SNAKE:
 
 class FRUIT:
     def __init__(self):
-        self.x = random.randint(0,cell_number -1)
-        self.y = random.randint(0,cell_number -1)
-        self.pos = Vector2(self.x,self.y)
+        self.randomize()
 
     def draw_fruit(self):
         fruit_rect = pygame.Rect(int(self.pos.x * cell_size),int(self.pos.y * cell_size),cell_size,cell_size)
         pygame.draw.rect(screen,(126,166,140),fruit_rect)
+
+    def randomize(self):
+        self.x = random.randint(0, cell_number - 1)
+        self.y = random.randint(0, cell_number - 1)
+        self.pos = Vector2(self.x, self.y)
+
+
 class MAIN:
     def __init__(self):
          self.snake = SNAKE()
          self.fruit = FRUIT()
+
     def update(self):
         self.snake.move_snake()
+        self.check_collision()
+
     def draw_elements(self):
-        self.snake.draw_snake()
-        self.fruit.draw_fruit()
+            self.snake.draw_snake()
+            self.fruit.draw_fruit()
+
+    def check_collision(self):
+        if self.fruit.pos == self.snake.body[0]:
+            self.fruit.randomize()
+            self.snake.add_block()
+
+
+
 
 
 
@@ -62,30 +79,27 @@ SCREEN_UPDATE = pygame.USEREVENT
 pygame.time.set_timer(SCREEN_UPDATE,150)
 
 while True:
-    print('dupa')
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-            if event.type == SCREEN_UPDATE:
-                main_game.update()
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_UP:
-                        main_game.snake.direction = Vector2(0,-1)
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            sys.exit()
+        if event.type == SCREEN_UPDATE:
+            main_game.update()
 
-                    if event.key == pygame.K_DOWN:
-                        main_game.snake.direction = Vector2(0,1)
-                    if event.key == pygame.K_LEFT:
-                        main_game.snake.direction = Vector2(-1,0)
-                    if event.key == pygame.K_RIGHT:
-                        main_game.snake.direction = Vector2(1,0)
+    # Move this part outside of the event loop
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_UP]:
+        main_game.snake.direction = Vector2(0, -1)
+    if keys[pygame.K_DOWN]:
+        main_game.snake.direction = Vector2(0, 1)
+    if keys[pygame.K_LEFT]:
+        main_game.snake.direction = Vector2(-1, 0)
+    if keys[pygame.K_RIGHT]:
+        main_game.snake.direction = Vector2(1, 0)
 
-
-
-
-        screen.fill((175,215,70))
-        main_game.draw_elements()
-        pygame.display.update()
-        clock.tick(60)
+    screen.fill((175, 215, 70))
+    main_game.draw_elements()
+    pygame.display.update()
+    clock.tick(100)  # I reduced the tick to 10 for testing purposes; you can adjust it later
 
 
