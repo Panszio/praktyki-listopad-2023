@@ -14,6 +14,8 @@ main_game = MAIN_GAME(
     cell_size=CELL_SIZE,
     screen=pygame.display.set_mode((CELL_NUMBER * CELL_SIZE, CELL_NUMBER * CELL_SIZE)),
     clock=pygame.time.Clock()
+    
+
 )
 
 SCREEN_UPDATE = pygame.USEREVENT
