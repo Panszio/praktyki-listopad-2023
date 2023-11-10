@@ -28,6 +28,7 @@ class MAIN_GAME:
     def update(self):
         self.snake.move_snake()
         self.check_collision()
+        self.check_if_hit_himself( )
         self.check_fail()
 
     def draw_elements(self):
@@ -44,6 +45,12 @@ class MAIN_GAME:
         if not 0 <= self.snake.body[0].x < self.cell_number or not 0 <= self.snake.body[0].y < self.cell_number:
             self.game_over()
 
+    def check_if_hit_himself(self):
+        snake_head = self.snake.body[0]
+        snake_body = self.snake.body[1:]
+
+        if snake_head in snake_body:
+            self.game_over()
     def game_over(self):
         pygame.quit()
         sys.exit()

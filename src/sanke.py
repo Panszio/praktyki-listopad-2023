@@ -8,13 +8,12 @@ CELL_NUMBER = 20
 CELL_SIZE = 40
 
 pygame.init()
-
 main_game = MAIN_GAME(
     cell_number=CELL_NUMBER,
     cell_size=CELL_SIZE,
     screen=pygame.display.set_mode((CELL_NUMBER * CELL_SIZE, CELL_NUMBER * CELL_SIZE)),
     clock=pygame.time.Clock()
-    
+
 
 )
 
