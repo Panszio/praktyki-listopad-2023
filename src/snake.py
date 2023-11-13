@@ -1,6 +1,19 @@
 import pygame
+from pygame import Rect
 from pygame.math import Vector2
+from enum import Enum
 
+class TurnsEnum(Enum):
+    LEFT = 0
+    RIGHT = 1
+
+
+DIRECTIONS = [
+    Vector2(0, -1),     # North - UP
+    Vector2(-1, 0),     # East - RIGHT
+    Vector2(0, 1),      # South - DOWN
+    Vector2(1, 0)       # West - LEFT
+]
 
 class SNAKE:
     def __init__(
@@ -37,40 +50,52 @@ class SNAKE:
         self.update_head_graphic()
         self.update_tail_graphic()
 
-        for index,block in enumerate(self.body):
-         x_pos = int(block.x * self.cell_size)
-         y_pos = int(block.y * self.cell_size)
-         block_rect = pygame.Rect(x_pos, y_pos, self.cell_size, self.cell_size)
+        for index, block in enumerate(self.body):
+            x_pos = int(block.x * self.cell_size)
+            y_pos = int(block.y * self.cell_size)
+            block_rect = pygame.Rect(x_pos, y_pos, self.cell_size, self.cell_size)
 
-
-        if index == 0:
-            self.screen.blit(self.head.block_rect)
-        elif index == len(self.body) - 1:
-            self.screen.blit(self.tail,block_rect)
-
-        else:
-            pygame.draw.rect(self.screen,(150,100,100),block_rect)
-
-
+            if index == 0:
+                self.screen.blit(self.head, block_rect)
+            elif index == len(self.body) - 1:
+                self.screen.blit(self.tail, block_rect)
+            else:
+                previous_block = self.body[index + 1] - block
+                next_block = self.body[index - 1] - block
+                if  previous_block.x == next_block.x:
+                    self.screen.blit(self.body_vertical, block_rect)
+                elif previous_block.y == next_block.y:
+                    self.screen.blit(self.body_horizontal, block_rect)
+                else:
+                    if previous_block.x == -1 and next_block.y == -1 or previous_block.y == -1 and next_block.x == -1:
+                        self.screen.blit(self.body_tl, block_rect)
+                    elif previous_block.x == -1 and next_block.y == 1 or previous_block.y == 1 and next_block.x == -1:
+                        self.screen.blit(self.body_bl, block_rect)
+                    elif previous_block.x == 1 and next_block.y == -1 or previous_block.y == -1 and next_block.x == 1:
+                        self.screen.blit(self.body_tr, block_rect)
+                    elif previous_block.x == 1 and next_block.y == 1 or previous_block.y == 1 and next_block.x == 1:
+                        self.screen.blit(self.body_br, block_rect)
     def update_head_graphic(self):
         head_relation = self.body[1] - self.body[0]
-        if head_relation == Vector2(1, 0): self.head = self.head_left
-        elif head_relation == Vector2(-1,0): self.head = self.head_right
-        elif head_relation == Vector2(0,1):  self.head = self.head_up
-        elif head_relation == Vector2(0,-1): self.head = self.head_down
+        if head_relation == Vector2(1, 0):
+            self.head = self.head_left
+        elif head_relation == Vector2(-1, 0):
+            self.head = self.head_right
+        elif head_relation == Vector2(0, 1):
+            self.head = self.head_up
+        elif head_relation == Vector2(0, -1):
+            self.head = self.head_down
 
     def update_tail_graphic(self):
         tail_relation = self.body[-2] - self.body[-1]
-        if tail_relation == Vector2(1, 0): self.tail = self.tail_left
-        elif tail_relation == Vector2(-1, 0): self.tail = self.tail_right
-        elif tail_relation == Vector2(0, 1): self.tail = self.tail_up
-        elif tail_relation == Vector2(0, -1): self.tail = self.tail_down
-
-
-
-
-
-
+        if tail_relation == Vector2(1, 0):
+            self.tail = self.tail_left
+        elif tail_relation == Vector2(-1, 0):
+            self.tail = self.tail_right
+        elif tail_relation == Vector2(0, 1):
+            self.tail = self.tail_up
+        elif tail_relation == Vector2(0, -1):
+            self.tail = self.tail_down
 
 
     def move_snake(self):
@@ -84,5 +109,25 @@ class SNAKE:
             body_copy.insert(0, body_copy[0] + self.direction)
             self.body = body_copy[:]
 
+    def change_direction(self, turn: TurnsEnum):
+        current_direction = self._direction_int()
+
+        if turn == TurnsEnum.RIGHT:
+            current_direction -= 1
+        elif turn == TurnsEnum.LEFT:
+            current_direction += 1
+
+        if current_direction < 0:    # left turn overlap
+            current_direction = 3
+        if current_direction > 3:    # right turn overlap
+            current_direction = 0
+
+        self.direction = DIRECTIONS[current_direction]
+
+    def _direction_int(self) -> int:
+        return DIRECTIONS.index(self.direction)
+
     def add_block(self):
         self.new_block = True
+
+

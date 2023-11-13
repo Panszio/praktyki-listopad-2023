@@ -16,7 +16,7 @@ class FRUIT:
         self.x = 0
         self.y = 0
         self.pos = Vector2(self.x, self.y)
-        self.apple = pygame.image.load('apple.png').convert_alpha()
+        self.apple = pygame.image.load('../Graphic/apple.png').convert_alpha()
 
         self.randomize()
 
