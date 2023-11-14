@@ -5,6 +5,17 @@ from pygame.math import Vector2
 
 from src import MAIN_GAME
 
+class TurnsEnum(Enum):
+    LEFT = 0
+    RIGHT = 1
+
+
+DIRECTIONS = [
+    Vector2(0, -1),     # North - UP
+    Vector2(-1, 0),     # East - RIGHT
+    Vector2(0, 1),      # South - DOWN
+    Vector2(1, 0)       # West - LEFT
+]
 
 class SNAKE:
     def __init__(
@@ -100,6 +111,24 @@ class SNAKE:
             body_copy = self.body[:-1]
             body_copy.insert(0, body_copy[0] + self.direction)
             self.body = body_copy[:]
+
+    def change_direction(self, turn: TurnsEnum):
+                current_direction = self._direction_int()
+
+                if turn == TurnsEnum.RIGHT:
+                    current_direction -= 1
+                elif turn == TurnsEnum.LEFT:
+                    current_direction += 1
+
+                if current_direction < 0:  # left turn overlap
+                    current_direction = 3
+                if current_direction > 3:  # right turn overlap
+                    current_direction = 0
+
+                self.direction = DIRECTIONS[current_direction]
+
+            def _direction_int(self) -> int:
+                return DIRECTIONS.index(self.direction)
 
     def add_block(self):
         self.new_block = True
