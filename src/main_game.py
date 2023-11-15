@@ -33,6 +33,7 @@ class MAIN_GAME:
                 cell_number=self.cell_number,
                 screen=self.screen,
                 color=ColorsEnum.PURPLE
+
             ),
             SNAKE(  # player 2
                 cell_size=self.cell_size,
@@ -45,6 +46,13 @@ class MAIN_GAME:
                 cell_number=self.cell_number,
                 screen=self.screen,
                 color=ColorsEnum.BLUE
+            ),
+            SNAKE(
+                cell_size=self.cell_size,
+                cell_number=self.cell_number,
+                screen=self.screen,
+                color=ColorsEnum.RED
+
             ),
         ]
         self.fruit = FRUIT(
@@ -124,10 +132,12 @@ class MAIN_GAME:
         game_font = pygame.font.Font('../Fonts/PoetsenOne-Regular.ttf', 12)
         points_str = ""
         for snake in self.snakes:
+            if snake.color == ColorsEnum.Blue:
+
             points_str += f"{snake.color.value}: {snake.points}, "
         score_surface = game_font.render(points_str, True, (56, 74, 12))
-        score_x = int(self.cell_size * self.cell_number - 80)
-        score_y = int(self.cell_size * self.cell_number - 30)
+        score_x = int(self.cell_size * self.cell_number - 60)
+        score_y = int(self.cell_size * self.cell_number - 15)
         score_rect = score_surface.get_rect(center=(score_x, score_y))
         self.screen.blit(score_surface, score_rect)
 

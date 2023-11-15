@@ -49,6 +49,12 @@ while True:
             if event.key == pygame.K_n:
                 main_game.snakes[2].change_direction(TurnsEnum.RIGHT)
 
+            if event.key == pygame.K_o:
+                main_game.snakes[3].change_direction(TurnsEnum.LEFT)
+            if event.key == pygame.K_p:
+                main_game.snakes[3].change_direction(TurnsEnum.RIGHT)
+
+
             if event.key == pygame.K_r:
                 main_game = build_game()
                 continue

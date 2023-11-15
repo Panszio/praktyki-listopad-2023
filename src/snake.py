@@ -32,6 +32,9 @@ START_POSITIONS = {
 }
 
 
+
+
+
 class SNAKE:
     def __init__(
             self,
