@@ -13,12 +13,12 @@ class FRUIT:
         self.cell_size = cell_size
         self.cell_number = cell_number
         self.screen = screen
+        self.apple = pygame.image.load('../Graphic/apple.png').convert_alpha()
         self.x = 0
         self.y = 0
         self.pos = Vector2(self.x, self.y)
-        self.apple = pygame.image.load('../Graphic/apple.png').convert_alpha()
-
         self.randomize()
+
 
     def draw_fruit(self):
         fruit_rect = pygame.Rect(

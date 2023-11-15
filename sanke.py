@@ -44,11 +44,24 @@ while True:
             if event.key == pygame.K_d:
                 main_game.snakes[1].change_direction(TurnsEnum.RIGHT)
 
+            if event.key == pygame.K_b:
+                main_game.snakes[2].change_direction(TurnsEnum.LEFT)
+            if event.key == pygame.K_n:
+                main_game.snakes[2].change_direction(TurnsEnum.RIGHT)
+
             if event.key == pygame.K_r:
                 main_game = build_game()
                 continue
 
-    if main_game.run:
-        main_game.screen.fill((175, 215, 70))
-        main_game.draw_elements()
-        pygame.display.update()
+            if event.key == pygame.K_ESCAPE:
+                if main_game.run:
+                    main_game.run = False
+                else:
+                    pygame.quit()
+                    sys.exit()
+
+
+        if main_game.run:
+            main_game.screen.fill((175, 215, 70))
+            main_game.draw_elements()
+            pygame.display.update()

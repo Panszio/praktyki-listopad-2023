@@ -1,6 +1,5 @@
 import pygame
 
-
 from pygame.math import Vector2
 from enum import Enum
 
@@ -17,6 +16,7 @@ DIRECTIONS = [
     Vector2(1, 0)  # West - LEFT
 ]
 
+
 class ColorsEnum(Enum):
     BLUE = 'blue'
     RED = 'red'
@@ -24,19 +24,30 @@ class ColorsEnum(Enum):
     PURPLE = 'purple'
 
 
+START_POSITIONS = {
+    ColorsEnum.BLUE: [Vector2(5, 10), Vector2(4, 10), Vector2(3, 10)],
+    ColorsEnum.RED: [Vector2(5, 10), Vector2(4, 10), Vector2(3, 10)],
+    ColorsEnum.YELLOW: [Vector2(5, 10), Vector2(4, 10), Vector2(3, 10)],
+    ColorsEnum.PURPLE: [Vector2(5, 10), Vector2(4, 10), Vector2(3, 10)]
+}
+
+
 class SNAKE:
     def __init__(
             self,
             cell_size: int,
+            cell_number: int,
             screen,
             color: ColorsEnum = ColorsEnum.BLUE
     ):
 
         self.cell_size = cell_size
+        self.cell_number = cell_number
         self.screen = screen
         self.color = color
+        self.points = 0
 
-        self.body = [Vector2(5, 10), Vector2(4, 10), Vector2(3, 10)]
+        self.body = START_POSITIONS[self.color]
         self.direction = Vector2(1, 0)
         self.new_block = False
 
@@ -122,9 +133,19 @@ class SNAKE:
             self.new_block = False
         else:
             body_copy = self.body[:-1]
-            body_copy.insert(0, body_copy[0] + self.direction)
-            self.body = body_copy[:]
+            new_position = body_copy[0] + self.direction
+            if new_position.x < 0:
+                new_position.x = self.cell_number
+            elif new_position.x >= self.cell_number:
+                new_position.x = 0
+            else:
+                if new_position.y < 0:
+                    new_position.y = self.cell_number
+                elif new_position.y >= self.cell_number:
+                    new_position.y = 0
 
+            body_copy.insert(0, new_position)
+            self.body = body_copy[:]
     def change_direction(self, turn: TurnsEnum):
         current_direction = self._direction_int()
 

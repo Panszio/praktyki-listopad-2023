@@ -1,6 +1,6 @@
 import pygame
-import random
-from pygame.math import Vector2
+# import random
+# from pygame.math import Vector2
 
 from src.snake import SNAKE, ColorsEnum
 from src.fruit import FRUIT
@@ -22,20 +22,29 @@ class MAIN_GAME:
         self.screen = screen
         self.clock = clock
 
-        self.x = 0
-        self.y = 0
-        self.pos = Vector2(self.x, self.y)
+        # self.x = 0
+        # self.y = 0
+        # self.pos = Vector2(self.x, self.y)
+        # self.randomize_snakes()
 
         self.snakes = [
-            SNAKE( #player 1
+            SNAKE(  # player 1
                 cell_size=self.cell_size,
+                cell_number=self.cell_number,
+                screen=self.screen,
+                color=ColorsEnum.PURPLE
+            ),
+            SNAKE(  # player 2
+                cell_size=self.cell_size,
+                cell_number=self.cell_number,
+                screen=self.screen,
+                color=ColorsEnum.YELLOW
+            ),
+            SNAKE(
+                cell_size=self.cell_size,
+                cell_number=self.cell_number,
                 screen=self.screen,
                 color=ColorsEnum.BLUE
-            ),
-            SNAKE( # player 2
-                cell_size=self.cell_size,
-                screen=self.screen,
-                color=ColorsEnum.RED
             ),
         ]
         self.fruit = FRUIT(
@@ -43,55 +52,53 @@ class MAIN_GAME:
             cell_number=self.cell_number,
             screen=self.screen
         )
-
         self.fps = fps
         pygame.time.set_timer(pygame.USEREVENT, int(1000 / self.fps))
 
         self.run = True
 
     def update(self):
-        self.snakes[0].move_snakes()
-        self.snakes[1].move_snakes()
+        for snake in self.snakes:
+            snake.move_snakes()
+
         self.check_collision()
         self.check_if_hit_himself()
-        self.check_fail()
+        # self.check_fail()
 
     def draw_elements(self):
         self.draw_grass()
-        self.snakes[0].draw_snakes()
-        self.snakes[1].draw_snakes()
+        for snake in self.snakes:
+            snake.draw_snakes()
         self.fruit.draw_fruit()
+        self.draw_score()
         self.draw_score()
         self.clock.tick(self.fps * 10)
 
     def check_collision(self):
-        if self.fruit.pos == self.snakes[0].body[0]:
-            self.fps += 1
-            if self.fruit.pos == self.snakes[1].body[0]:
+        for snake in self.snakes:
+            if self.fruit.pos == snake.body[0]:
                 self.fps += 1
                 pygame.time.set_timer(pygame.USEREVENT, int(1000 / self.fps))
-            self.fruit.randomize()
-            self.snakes[0].add_block(),  self.snakes[1].add_block()
+                snake.add_block()
+                self.fruit.randomize()
+                snake.points += 1
+
+    # def check_fail(self):
+        # for snake in self.snakes:
+        # # jeżeli snakes 0 wyjdzie z okna gra się wyłączy
+        #     if not 0 <= snake.body[0].x < self.cell_number or not 0 <= snake.body[0].y < self.cell_number:
 
 
-
-    def check_fail(self):
-        # jeżeli snakes 0 wyjdzie z okna gra się wyłączy
-        if not 0 <= self.snakes[0].body[0].x < self.cell_number or not 0 <= self.snakes[0].body[0].y < self.cell_number:
-            self.game_over()
-        if not 0 <= self.snakes[1].body[0].x < self.cell_number or not 0 <= self.snakes[1].body[0].y < self.cell_number:
-                self.game_over()
+    # def randomize_snakes(self):
+    #     self.x.snakes[0] = random.randint(0, self.cell_number - 1)
+    #     self.y.snakes[0] = random.randint(0, self.cell_number - 1)
 
     def check_if_hit_himself(self):
-        snakes_head = self.snakes[0].body[0]
-        snakes_body = self.snakes[0].body[1:]
-        snakes1_head = self.snakes[1].body[0]
-        snakes1_body = self.snakes[1].body[1:]
-
-        if snakes_head in snakes_body:
-            self.game_over()
-        if snakes1_head in snakes1_body:
-            self.game_over()
+        for snake in self.snakes:
+            head = snake.body[0]
+            body = snake.body[1:]
+            if head in body:
+                self.game_over()
 
     def game_over(self):
         # pygame.quit()
@@ -114,14 +121,16 @@ class MAIN_GAME:
                         pygame.draw.rect(self.screen, grass_color, grass_rect)
 
     def draw_score(self):
-        game_font = pygame.font.Font('../Fonts/PoetsenOne-Regular.ttf', 25)
-        score_text = str(len(self.snakes[0].body) - 3)
-        score_surface = game_font.render(score_text, True, (56, 74, 12))
-        score_x = int(self.cell_size * self.cell_number - 60)
-        score_y = int(self.cell_size * self.cell_number - 40)
+        game_font = pygame.font.Font('../Fonts/PoetsenOne-Regular.ttf', 12)
+        points_str = ""
+        for snake in self.snakes:
+            points_str += f"{snake.color.value}: {snake.points}, "
+        score_surface = game_font.render(points_str, True, (56, 74, 12))
+        score_x = int(self.cell_size * self.cell_number - 80)
+        score_y = int(self.cell_size * self.cell_number - 30)
         score_rect = score_surface.get_rect(center=(score_x, score_y))
         self.screen.blit(score_surface, score_rect)
 
-    def randomize_snakes(self):
-        self.x.snakes[0] = random.randint(0, self.cell_number - 1)
-        self.y.snakes[0] = random.randint(0, self.cell_number - 1)
+
+
+
