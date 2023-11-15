@@ -61,6 +61,7 @@ class SNAKE:
         self.body_bl = pygame.image.load(file_prefix + '/body_bl.png').convert_alpha()
 
         self.head = self.head_down
+        self.tail  = self.tail_down
     def draw_snakes(self):
         self.update_head_graphic()
         self.update_tail_graphic()

@@ -1,10 +1,14 @@
 import pygame
+import random
+from pygame.math import Vector2
 
 from src.snake import SNAKE, ColorsEnum
 from src.fruit import FRUIT
 
 
 class MAIN_GAME:
+
+
     def __init__(
             self,
             cell_number: int,
@@ -12,19 +16,23 @@ class MAIN_GAME:
             screen,
             clock,
             fps: int,
-
     ):
         self.cell_number = cell_number
         self.cell_size = cell_size
         self.screen = screen
         self.clock = clock
+
+        self.x = 0
+        self.y = 0
+        self.pos = Vector2(self.x, self.y)
+
         self.snakes = [
-            SNAKE(
+            SNAKE( #player 1
                 cell_size=self.cell_size,
                 screen=self.screen,
-                color=ColorsEnum.PURPLE
+                color=ColorsEnum.BLUE
             ),
-            SNAKE(
+            SNAKE( # player 2
                 cell_size=self.cell_size,
                 screen=self.screen,
                 color=ColorsEnum.RED
@@ -43,6 +51,7 @@ class MAIN_GAME:
 
     def update(self):
         self.snakes[0].move_snakes()
+        self.snakes[1].move_snakes()
         self.check_collision()
         self.check_if_hit_himself()
         self.check_fail()
@@ -50,7 +59,7 @@ class MAIN_GAME:
     def draw_elements(self):
         self.draw_grass()
         self.snakes[0].draw_snakes()
-        # self.snakes[1].draw_snakes()
+        self.snakes[1].draw_snakes()
         self.fruit.draw_fruit()
         self.draw_score()
         self.clock.tick(self.fps * 10)
@@ -58,20 +67,30 @@ class MAIN_GAME:
     def check_collision(self):
         if self.fruit.pos == self.snakes[0].body[0]:
             self.fps += 1
-            pygame.time.set_timer(pygame.USEREVENT, int(1000 / self.fps))
+            if self.fruit.pos == self.snakes[1].body[0]:
+                self.fps += 1
+                pygame.time.set_timer(pygame.USEREVENT, int(1000 / self.fps))
             self.fruit.randomize()
-            self.snakes[0].add_block()
+            self.snakes[0].add_block(),  self.snakes[1].add_block()
+
+
 
     def check_fail(self):
         # jeżeli snakes 0 wyjdzie z okna gra się wyłączy
         if not 0 <= self.snakes[0].body[0].x < self.cell_number or not 0 <= self.snakes[0].body[0].y < self.cell_number:
             self.game_over()
+        if not 0 <= self.snakes[1].body[0].x < self.cell_number or not 0 <= self.snakes[1].body[0].y < self.cell_number:
+                self.game_over()
 
     def check_if_hit_himself(self):
         snakes_head = self.snakes[0].body[0]
         snakes_body = self.snakes[0].body[1:]
+        snakes1_head = self.snakes[1].body[0]
+        snakes1_body = self.snakes[1].body[1:]
 
         if snakes_head in snakes_body:
+            self.game_over()
+        if snakes1_head in snakes1_body:
             self.game_over()
 
     def game_over(self):
@@ -102,3 +121,7 @@ class MAIN_GAME:
         score_y = int(self.cell_size * self.cell_number - 40)
         score_rect = score_surface.get_rect(center=(score_x, score_y))
         self.screen.blit(score_surface, score_rect)
+
+    def randomize_snakes(self):
+        self.x.snakes[0] = random.randint(0, self.cell_number - 1)
+        self.y.snakes[0] = random.randint(0, self.cell_number - 1)
