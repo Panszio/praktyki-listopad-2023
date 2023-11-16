@@ -33,7 +33,6 @@ class MAIN_GAME:
                 cell_number=self.cell_number,
                 screen=self.screen,
                 color=ColorsEnum.PURPLE
-
             ),
             SNAKE(  # player 2
                 cell_size=self.cell_size,
@@ -52,7 +51,6 @@ class MAIN_GAME:
                 cell_number=self.cell_number,
                 screen=self.screen,
                 color=ColorsEnum.RED
-
             ),
         ]
         self.fruit = FRUIT(
@@ -62,6 +60,8 @@ class MAIN_GAME:
         )
         self.fps = fps
         pygame.time.set_timer(pygame.USEREVENT, int(1000 / self.fps))
+
+
 
         self.run = True
 
@@ -105,6 +105,7 @@ class MAIN_GAME:
         for snake in self.snakes:
             head = snake.body[0]
             body = snake.body[1:]
+
             if head in body:
                 self.game_over()
 
@@ -129,17 +130,20 @@ class MAIN_GAME:
                         pygame.draw.rect(self.screen, grass_color, grass_rect)
 
     def draw_score(self):
-        game_font = pygame.font.Font('../Fonts/PoetsenOne-Regular.ttf', 12)
-        points_str = ""
-        for snake in self.snakes:
-            if snake.color == ColorsEnum.Blue:
+        game_font = pygame.font.Font('../Fonts/PoetsenOne-Regular.ttf',15 )
+        x_offset = 70
+        y_offset = 90
+        decrement_y = 20
 
-            points_str += f"{snake.color.value}: {snake.points}, "
-        score_surface = game_font.render(points_str, True, (56, 74, 12))
-        score_x = int(self.cell_size * self.cell_number - 60)
-        score_y = int(self.cell_size * self.cell_number - 15)
-        score_rect = score_surface.get_rect(center=(score_x, score_y))
-        self.screen.blit(score_surface, score_rect)
+        for snake in self.snakes:
+            points_str = f"{snake.color.value}: {snake.points}, "
+            score_surface = game_font.render(points_str, True, snake.color.value)
+
+            score_x = int(self.cell_size * self.cell_number - x_offset)
+            score_y = int(self.cell_size * self.cell_number - y_offset)
+            y_offset -= decrement_y
+            score_rect = score_surface.get_rect(center=(score_x, score_y))
+            self.screen.blit(score_surface, score_rect)
 
 
 

@@ -23,17 +23,13 @@ class ColorsEnum(Enum):
     YELLOW = 'yellow'
     PURPLE = 'purple'
 
-
 START_POSITIONS = {
     ColorsEnum.BLUE: [Vector2(5, 10), Vector2(4, 10), Vector2(3, 10)],
-    ColorsEnum.RED: [Vector2(5, 10), Vector2(4, 10), Vector2(3, 10)],
-    ColorsEnum.YELLOW: [Vector2(5, 10), Vector2(4, 10), Vector2(3, 10)],
-    ColorsEnum.PURPLE: [Vector2(5, 10), Vector2(4, 10), Vector2(3, 10)]
+    ColorsEnum.RED: [Vector2(10, 6), Vector2(10, 5), Vector2(10, 4)],
+    ColorsEnum.YELLOW: [Vector2(15, 10), Vector2(14, 10), Vector2(13, 10)],
+    ColorsEnum.PURPLE: [Vector2(8, 10), Vector2(7, 10), Vector2(6, 10)]
+
 }
-
-
-
-
 
 class SNAKE:
     def __init__(
@@ -169,3 +165,5 @@ class SNAKE:
 
     def add_block(self):
         self.new_block = True
+
+
