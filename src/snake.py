@@ -23,13 +23,21 @@ class ColorsEnum(Enum):
     YELLOW = 'yellow'
     PURPLE = 'purple'
 
-START_POSITIONS = {
-    ColorsEnum.BLUE: [Vector2(5, 10), Vector2(4, 10), Vector2(3, 10)],
-    ColorsEnum.RED: [Vector2(10, 6), Vector2(10, 5), Vector2(10, 4)],
-    ColorsEnum.YELLOW: [Vector2(15, 10), Vector2(14, 10), Vector2(13, 10)],
+START_POSITIONS={
+    ColorsEnum.BLUE: [Vector2(13, 10), Vector2(12, 10), Vector2(11, 10)],
+    ColorsEnum.RED: [Vector2(10,15), Vector2(9, 15), Vector2(8, 15)],
+    ColorsEnum.YELLOW: [Vector2(13, 20), Vector2(12, 20), Vector2(1, 20)],
     ColorsEnum.PURPLE: [Vector2(8, 10), Vector2(7, 10), Vector2(6, 10)]
-
 }
+
+
+RGB_VALUES = {
+    "blue": (0, 162, 232),
+    "red": (232, 28, 36),
+    "yellow": (255, 201, 14),
+    "purple": (83, 58, 113),
+}
+
 
 class SNAKE:
     def __init__(
@@ -37,7 +45,7 @@ class SNAKE:
             cell_size: int,
             cell_number: int,
             screen,
-            color: ColorsEnum = ColorsEnum.BLUE
+            color: ColorsEnum = ColorsEnum.BLUE,
     ):
 
         self.cell_size = cell_size

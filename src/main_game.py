@@ -2,7 +2,7 @@ import pygame
 # import random
 # from pygame.math import Vector2
 
-from src.snake import SNAKE, ColorsEnum
+from src.snake import SNAKE, ColorsEnum, RGB_VALUES
 from src.fruit import FRUIT
 
 
@@ -111,7 +111,7 @@ class MAIN_GAME:
 
     def game_over(self):
         # pygame.quit()
-        # sys.exit()
+        # sys.exit()r
         self.run = False
 
     def draw_grass(self):
@@ -130,14 +130,14 @@ class MAIN_GAME:
                         pygame.draw.rect(self.screen, grass_color, grass_rect)
 
     def draw_score(self):
-        game_font = pygame.font.Font('../Fonts/PoetsenOne-Regular.ttf',15 )
-        x_offset = 70
-        y_offset = 90
-        decrement_y = 20
+        game_font = pygame.font.Font('../Fonts/PoetsenOne-Regular.ttf',30 )
+        x_offset = 15
+        y_offset = 100
+        decrement_y = 25
 
         for snake in self.snakes:
-            points_str = f"{snake.color.value}: {snake.points}, "
-            score_surface = game_font.render(points_str, True, snake.color.value)
+            points_str = f" {snake.points} "
+            score_surface = game_font.render(points_str, True ,RGB_VALUES[snake.color.value])
 
             score_x = int(self.cell_size * self.cell_number - x_offset)
             score_y = int(self.cell_size * self.cell_number - y_offset)
