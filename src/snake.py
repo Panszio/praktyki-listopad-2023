@@ -23,7 +23,7 @@ class ColorsEnum(Enum):
     YELLOW = 'yellow'
     PURPLE = 'purple'
 
-START_POSITIONS={
+START_POSITIONS = {
     ColorsEnum.BLUE: [Vector2(13, 10), Vector2(12, 10), Vector2(11, 10)],
     ColorsEnum.RED: [Vector2(10,15), Vector2(9, 15), Vector2(8, 15)],
     ColorsEnum.YELLOW: [Vector2(13, 20), Vector2(12, 20), Vector2(1, 20)],

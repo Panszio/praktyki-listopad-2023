@@ -33,15 +33,6 @@ quit_button = button.Button(336, 375, quit_img, 1)
 keys_button = button.Button(246, 250, keys_img, 1)
 back_button = button.Button(332, 450, back_img, 1)
 
-window = Tk()
-x = IntVar()
-def display():
-    if(x.get()==1):
-      print("you agree")
-    else:
-      print("You dont agree")
-
-
 
 
 
@@ -63,24 +54,26 @@ while run:
         print("check binding")
         #draw pause screen buttons
       if START_img .draw(screen):
-        check_button = Checkbutton(window,
-        text="I agree with something", variable=x,
-                                   onvalue=1,
-                                   offvalue=0,
-                                   command=display)
+          print("dupa")
+
+
+
     #check if the options menu is open
-  if menu_state == "options":
+    if menu_state == "options":
       #draw the different options buttons
-    if menu_state == "main":
+
       if back_button.draw(screen):
-        if draw_text("Press SPACE to pause", font, TEXT_COL, 160, 250):
+        menu_state = "main"
+  else:
+    draw_text("Press SPACE to pause", font, TEXT_COL, 160, 250)
+
   #event handler
-            for event in pygame.event.get():
-                if event.type == pygame.KEYDOWN:
-                  if event.key == pygame.K_SPACE:
-                    game_paused = True
-                if event.type == pygame.QUIT:
-                  run = False
+  for event in pygame.event.get():
+    if event.type == pygame.KEYDOWN:
+      if event.key == pygame.K_SPACE:
+        game_paused = True
+    if event.type == pygame.QUIT:
+      run = False
 
   pygame.display.update()
 pygame.quit()
