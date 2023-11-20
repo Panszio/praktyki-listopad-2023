@@ -4,6 +4,8 @@ import sys
 from src import MAIN_GAME
 from src.snake import TurnsEnum
 
+
+
 CELL_NUMBER = 30
 CELL_SIZE = 40
 FPS = 6

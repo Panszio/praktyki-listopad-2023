@@ -1,6 +1,6 @@
 import pygame
-# import random
-# from pygame.math import Vector2
+
+from pygame.math import Vector2
 
 from src.snake import SNAKE, ColorsEnum, RGB_VALUES
 from src.fruit import FRUIT
@@ -22,10 +22,10 @@ class MAIN_GAME:
         self.screen = screen
         self.clock = clock
 
-        # self.x = 0
-        # self.y = 0
-        # self.pos = Vector2(self.x, self.y)
-        # self.randomize_snakes()
+        self.x = 0
+        self.y = 0
+        self.pos = Vector2(self.x, self.y)
+
 
         self.snakes = [
             SNAKE(  # player 1
@@ -68,10 +68,9 @@ class MAIN_GAME:
     def update(self):
         for snake in self.snakes:
             snake.move_snakes()
-
         self.check_collision()
         self.check_if_hit_himself()
-        # self.check_fail()
+        self.check_fail()
 
     def draw_elements(self):
         self.draw_grass()
@@ -91,15 +90,12 @@ class MAIN_GAME:
                 self.fruit.randomize()
                 snake.points += 1
 
-    # def check_fail(self):
-        # for snake in self.snakes:
-        # # jeżeli snakes 0 wyjdzie z okna gra się wyłączy
-        #     if not 0 <= snake.body[0].x < self.cell_number or not 0 <= snake.body[0].y < self.cell_number:
+    def check_fail(self):
+        for snake in self.snakes:
+# jeżeli snakes 0 wyjdzie z okna gra się wyłączy
+            if not 0 <= snake.body[0].x < self.cell_number or not 0 <= snake.body[0].y < self.cell_number:
 
 
-    # def randomize_snakes(self):
-    #     self.x.snakes[0] = random.randint(0, self.cell_number - 1)
-    #     self.y.snakes[0] = random.randint(0, self.cell_number - 1)
 
     def check_if_hit_himself(self):
         for snake in self.snakes:
@@ -109,41 +105,41 @@ class MAIN_GAME:
             if head in body:
                 self.game_over()
 
-    def game_over(self):
-        # pygame.quit()
-        # sys.exit()r
-        self.run = False
+        def game_over(self):
+            # pygame.quit()
+            # sys.exit()r
+            self.run = False
 
-    def draw_grass(self):
-        for row in range(self.cell_number):
-            grass_color = (167, 209, 61)
-            if row % 2 == 0:
-                for col in range(self.cell_number):
-                    grass_rect = pygame.Rect(col * self.cell_size, row * self.cell_size, self.cell_size, self.cell_size)
-                    pygame.draw.rect(self.screen, grass_color, grass_rect)
-
-            else:
-                for col in range(self.cell_number):
-                    if col % 2 != 0:
-                        grass_rect = pygame.Rect(col * self.cell_size, row * self.cell_size, self.cell_size,
-                                                 self.cell_size)
+        def draw_grass(self):
+            for row in range(self.cell_number):
+                grass_color = (167, 209, 61)
+                if row % 2 == 0:
+                    for col in range(self.cell_number):
+                        grass_rect = pygame.Rect(col * self.cell_size, row * self.cell_size, self.cell_size, self.cell_size)
                         pygame.draw.rect(self.screen, grass_color, grass_rect)
 
-    def draw_score(self):
-        game_font = pygame.font.Font('../Fonts/PoetsenOne-Regular.ttf',30 )
-        x_offset = 15
-        y_offset = 100
-        decrement_y = 25
+                else:
+                    for col in range(self.cell_number):
+                        if col % 2 != 0:
+                            grass_rect = pygame.Rect(col * self.cell_size, row * self.cell_size, self.cell_size,
+                                                     self.cell_size)
+                            pygame.draw.rect(self.screen, grass_color, grass_rect)
 
-        for snake in self.snakes:
-            points_str = f" {snake.points} "
-            score_surface = game_font.render(points_str, True ,RGB_VALUES[snake.color.value])
+        def draw_score(self):
+            game_font = pygame.font.Font('../Fonts/PoetsenOne-Regular.ttf',30 )
+            x_offset = 15
+            y_offset = 100
+            decrement_y = 25
 
-            score_x = int(self.cell_size * self.cell_number - x_offset)
-            score_y = int(self.cell_size * self.cell_number - y_offset)
-            y_offset -= decrement_y
-            score_rect = score_surface.get_rect(center=(score_x, score_y))
-            self.screen.blit(score_surface, score_rect)
+            for snake in self.snakes:
+                points_str = f" {snake.points} "
+                score_surface = game_font.render(points_str, True ,RGB_VALUES[snake.color.value])
+
+                score_x = int(self.cell_size * self.cell_number - x_offset)
+                score_y = int(self.cell_size * self.cell_number - y_offset)
+                y_offset -= decrement_y
+                score_rect = score_surface.get_rect(center=(score_x, score_y))
+                self.screen.blit(score_surface, score_rect)
 
 
 
