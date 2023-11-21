@@ -1,12 +1,32 @@
 import pygame
 import button
-from tkinter import *
+import pygame_menu
+
+from main_game import MAIN_GAME
+from sanke import  build_snake
+from enum import Enum
+
+
 
 pygame.init()
 
 #create game window
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
+MAIN_GAME = MAIN_GAME
+build_snake = build_snake
+
+class Key_Bindings(Enum):
+    PURPLE = "Left K_left Right K_right"
+    YELLOW = "Left K_a Right K_d"
+    BLUE = "Left K_b Right K_n"
+    RED = "Left K_o Right K_p"
+
+
+
+
+
+
 
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Main Menu")
@@ -41,39 +61,16 @@ def draw_text(text, font, text_col, x, y):
   screen.blit(img, (x, y))
 
 #game loop
-run = True
-while run:
-
-  screen.fill((52, 78, 91))
-
-  #check if game is paused
-  if game_paused == True:
-    #check menu state
-    if menu_state == "main":
-      if keys_button.draw(screen):
-        print("check binding")
-        #draw pause screen buttons
-      if START_img .draw(screen):
-          print("dupa")
 
 
 
-    #check if the options menu is open
-    if menu_state == "options":
-      #draw the different options buttons
+screen.fill((167, 209, 61))
 
-      if back_button.draw(screen):
-        menu_state = "main"
-  else:
-    draw_text("Press SPACE to pause", font, TEXT_COL, 160, 250)
+def Start_menu():
+  start_menu = pygame_menu.Menu(width = SCREEN_WIDTH, height = SCREEN_HEIGHT, title= "Welcome to snake Game!",
+                                theme=pygame_menu.themes.THEME_BLUE)
+  start_menu.add.button("Play", MAIN_GAME ,build_snake)
+  start_menu.add.button("Key Banding",Key_Bindings)
 
-  #event handler
-  for event in pygame.event.get():
-    if event.type == pygame.KEYDOWN:
-      if event.key == pygame.K_SPACE:
-        game_paused = True
-    if event.type == pygame.QUIT:
-      run = False
 
-  pygame.display.update()
 pygame.quit()
