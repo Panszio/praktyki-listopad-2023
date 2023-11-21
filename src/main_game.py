@@ -9,6 +9,9 @@ from src.fruit import FRUIT
 class MAIN_GAME:
 
 
+
+
+
     def __init__(
             self,
             cell_number: int,
