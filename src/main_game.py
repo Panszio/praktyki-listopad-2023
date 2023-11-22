@@ -1,9 +1,14 @@
 import pygame
+import sys
 
 
 
 from src.snake import SNAKE, ColorsEnum, RGB_VALUES
 from src.fruit import FRUIT
+
+
+
+pygame.init()
 
 
 class MAIN_GAME:
@@ -107,7 +112,8 @@ class MAIN_GAME:
     def game_over(self):
         # pygame.quit()
         # sys.exit()r
-        self.run = False
+        end = self.run = False
+        print(end)
 
     def draw_grass(self):
         for row in range(self.cell_number):
@@ -139,6 +145,19 @@ class MAIN_GAME:
             y_offset -= decrement_y
             score_rect = score_surface.get_rect(center=(score_x, score_y))
             self.screen.blit(score_surface, score_rect)
+
+    run = True
+
+    while run:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run = False
+    pygame.display.flip()
+
+    pygame.quit()
+    sys.exit()
+
+
 
 
 

@@ -6,7 +6,7 @@ from src.snake import TurnsEnum
 pygame.init()
 
 def build_game():
-    CELL_NUMBER = 30
+    CELL_NUMBER = 25
     CELL_SIZE = 40
     FPS = 6
     return MAIN_GAME(
