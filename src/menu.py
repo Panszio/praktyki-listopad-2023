@@ -2,6 +2,7 @@ import pygame
 import pygame_menu as pygameMenu
 from sanke import game_loop
 from enum import Enum
+from snake import TurnsEnum, ColorsEnum, KEYS
 
 # Utwórz okno gry
 SCREEN_WIDTH = 800
@@ -43,30 +44,36 @@ def show_key_bindings_menu():
     key_menu = pygameMenu.Menu(width=SCREEN_WIDTH, height=SCREEN_HEIGHT, title="Key Bindings",
                                 theme=pygameMenu.themes.THEME_BLUE)
 
-    for binding in Key_Bindings:
-        key_menu.add.label(binding.name + ": " + binding.value)
+    # for binding in Key_Bindings:
+    #     key_menu.add.label(binding.name + ": " + binding.value)
 
-    key_menu.add.button("Back", show_previous_menu)
+    for color in ColorsEnum:
+        key_left_name = pygame.key.name(KEYS[color][TurnsEnum.LEFT])
+        key_right_name = pygame.key.name(KEYS[color][TurnsEnum.RIGHT])
+        key_menu.add.label(f"{color.value}: l - {key_left_name}, r - {key_right_name}")
+
+    key_menu.add.button("Back", start_menu)
     current_menu = key_menu
     key_menu.mainloop(screen)
 
 def checkbox_menu():
-        global current_menu
+    global current_menu
 
-        Check_menu = pygameMenu.Menu(width=SCREEN_WIDTH, height=SCREEN_HEIGHT, title="Choose a SNAKE",
-                                     theme=pygameMenu.themes.THEME_BLUE)
+    Check_menu = pygameMenu.Menu(width=SCREEN_WIDTH, height=SCREEN_HEIGHT, title="Choose a SNAKE",
+                                  theme=pygameMenu.themes.THEME_BLUE)
 
-        Check_menu.add.toggle_switch('One Snake', state_text=('On', 'Off'), state=0)
-        Check_menu.add.toggle_switch('Two Snakes', state_text=('On', 'Off'), state=0)
-        Check_menu.add.toggle_switch('Three Snakes', state_text=('On', 'Off'), state=0)
-        Check_menu.add.toggle_switch('Four Snakes', state_text=('On', 'Off'), state=0)
 
-        Check_menu.add.button('Play', game_loop)
+    Check_menu.add.button(f"Play 1", lambda: game_loop(1))
+    Check_menu.add.button(f"Play 2", lambda: game_loop(2))
+    Check_menu.add.button(f"Play 3", lambda: game_loop(3))
+    Check_menu.add.button(f"Play 4", lambda: game_loop(4))
+    Check_menu.add.button("Back", start_menu)
+    current_menu = Check_menu
+    Check_menu.mainloop(screen)
 
-        current_menu = Check_menu
-        Check_menu.mainloop(screen)
 
-        Check_menu.mainloop(screen)
+
+
 def show_previous_menu():
     global current_menu
     if current_menu is not None:

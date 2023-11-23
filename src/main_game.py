@@ -1,21 +1,12 @@
 import pygame
 
-
-
-from src.snake import SNAKE, ColorsEnum, RGB_VALUES
+from src.snake import SNAKE, ColorsEnum, RGB_VALUES, TurnsEnum
 from src.fruit import FRUIT
-
-
 
 pygame.init()
 
 
 class MAIN_GAME:
-
-
-
-
-
     def __init__(
             self,
             cell_number: int,
@@ -23,41 +14,17 @@ class MAIN_GAME:
             screen,
             clock,
             fps: int,
+            players_count: int
     ):
         self.cell_number = cell_number
         self.cell_size = cell_size
         self.screen = screen
         self.clock = clock
+        self.players_count = players_count
 
 
+        self._setup_snakes()
 
-
-        self.snakes = [
-            SNAKE(  # player 1
-                cell_size=self.cell_size,
-                cell_number=self.cell_number,
-                screen=self.screen,
-                color=ColorsEnum.PURPLE
-            ),
-            SNAKE(  # player 2
-                cell_size=self.cell_size,
-                cell_number=self.cell_number,
-                screen=self.screen,
-                color=ColorsEnum.YELLOW
-            ),
-            SNAKE(
-                cell_size=self.cell_size,
-                cell_number=self.cell_number,
-                screen=self.screen,
-                color=ColorsEnum.BLUE
-            ),
-            SNAKE(
-                cell_size=self.cell_size,
-                cell_number=self.cell_number,
-                screen=self.screen,
-                color=ColorsEnum.RED
-            ),
-        ]
         self.fruit = FRUIT(
             cell_size=self.cell_size,
             cell_number=self.cell_number,
@@ -75,7 +42,8 @@ class MAIN_GAME:
             snake.move_snakes()
         self.check_collision()
         self.check_if_hit_himself()
-        self.kill_somebody()
+        self.check_if_hit_other()
+        # self.kill_somebody()
 
     def draw_elements(self):
         self.draw_grass()
@@ -95,31 +63,46 @@ class MAIN_GAME:
                 self.fruit.randomize()
                 snake.points += 1
 
-    def kill_somebody(self):
-        for index, snake in enumerate(self.snakes):
-            if snake.is_alive == False:
-                return
+    # def kill_somebody(self):
+    #     for index, snake in enumerate(self.snakes):
+    #         if snake.is_alive == False:
+    #             return
 
 
                 # print(f"nie żyje snake nr {index + 1}")
 
 
-
-
-
     def check_if_hit_himself(self):
         for index, snake in enumerate(self.snakes):
-            if snake.is_alive == False:
-                return
+            if not snake.is_alive:
+                continue
 
             head = snake.body[0]
             body = snake.body[1:]
             if head in body:
-                end = snake.is_alive
-                print(end)
                 snake.is_alive = False
-
                 print(f"nie żyje snake nr {index + 1}")
+
+    def check_if_hit_other(self):
+        for index, snake in enumerate(self.snakes):
+            # sprawdzamy dla wszystkich zywych wezy, czy nie weszly w kogos
+            if not snake.is_alive:
+                continue
+
+            head = snake.body[0]  # glowa aktualnie sprawdzanego weza
+
+            for jindex, other_snake in enumerate(self.snakes):
+                # odrzucamy snake, ktory nie zyje, lub jezeli jest to ten sam snake
+                # ktory wlasnie sprawdzamy
+                if not snake.is_alive or index == jindex:
+                    continue
+
+                body = other_snake.body[1:]
+                if head in body:
+                    snake.is_alive = False
+                    print(f"snake nr {index + 1} wszedl w {jindex + 1}")
+
+
     def game_over(self):
         # pygame.quit()
         # sys.exit()r
@@ -158,8 +141,20 @@ class MAIN_GAME:
             self.screen.blit(score_surface, score_rect)
 
 
+    def _setup_snakes(self):
+        self.snakes = []
+        available_colors = list(ColorsEnum)
 
+        for i in range(self.players_count):
+            self.snakes.append(
+                SNAKE(
+                    cell_size=self.cell_size,
+                    cell_number=self.cell_number,
+                    screen=self.screen,
+                    color=available_colors[i]
+                )
+            )
 
-
-
-
+    def move_snakes(self, key):
+        for snake in self.snakes:
+            snake.move(key)

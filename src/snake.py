@@ -30,6 +30,25 @@ START_POSITIONS = {
     ColorsEnum.PURPLE: [Vector2(8, 10), Vector2(7, 10), Vector2(6, 10)]
 }
 
+KEYS = {
+    ColorsEnum.BLUE: {
+        TurnsEnum.LEFT: pygame.K_LEFT,
+        TurnsEnum.RIGHT: pygame.K_RIGHT
+    },
+    ColorsEnum.RED: {
+        TurnsEnum.LEFT: pygame.K_a,
+        TurnsEnum.RIGHT: pygame.K_d
+    },
+    ColorsEnum.YELLOW: {
+        TurnsEnum.LEFT: pygame.K_b,
+        TurnsEnum.RIGHT: pygame.K_n,
+    },
+    ColorsEnum.PURPLE: {
+        TurnsEnum.LEFT: pygame.K_o,
+        TurnsEnum.RIGHT: pygame.K_p,
+    }
+}
+
 
 RGB_VALUES = {
     "blue": (0, 162, 232),
@@ -56,6 +75,9 @@ class SNAKE:
         self.points = 0
 
         self.body = START_POSITIONS[self.color]
+        self.key_left = KEYS[self.color][TurnsEnum.LEFT]
+        self.key_right = KEYS[self.color][TurnsEnum.RIGHT]
+
         self.direction = Vector2(1, 0)
         self.new_block = False
 
@@ -80,9 +102,10 @@ class SNAKE:
         self.body_bl = pygame.image.load(file_prefix + '/body_bl.png').convert_alpha()
 
         self.head = self.head_down
-        self.tail  = self.tail_down
+        self.tail = self.tail_down
     def draw_snakes(self):
-        if self.is_alive == False: return
+        # if self.is_alive == False:
+        #     return
         self.update_head_graphic()
         self.update_tail_graphic()
 
@@ -136,6 +159,9 @@ class SNAKE:
             self.tail = self.tail_down
 
     def move_snakes(self):
+        if not self.is_alive:
+            return
+
         if self.new_block:
             body_copy = self.body[:]
             body_copy.insert(0, body_copy[0] + self.direction)
@@ -170,6 +196,12 @@ class SNAKE:
             current_direction = 0
 
         self.direction = DIRECTIONS[current_direction]
+
+    def move(self, key):
+        if key == self.key_left:
+            self.change_direction(TurnsEnum.LEFT)
+        elif key == self.key_right:
+            self.change_direction(TurnsEnum.RIGHT)
 
     def _direction_int(self) -> int:
         return DIRECTIONS.index(self.direction)

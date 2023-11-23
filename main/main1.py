@@ -1,89 +1,69 @@
 import pygame
-import self
+import sys
 
+# Inicjalizacja Pygame
 pygame.init()
 
+# Ustawienia okna gry
+screen_width, screen_height = 400, 300
+screen = pygame.display.set_mode((screen_width, screen_height))
+pygame.display.set_caption("Checkboxy w Pygame")
 
-class snake(object):
-     body = []
-     turns = {}
+# Kolory
+white = (255, 255, 255)
+black = (0, 0, 0)
+gray = (200, 200, 200)
 
-def __init__(self, color , pos):
-        self.color = color
-        self.head = cube(pos)
-        self.body.append(self.head)
-        self.dirnx = 0
-        self.dirny = 1
+# Klasa reprezentująca checkbox
+class Checkbox:
+    def __init__(self, x, y, width, height, text):
+        self.rect = pygame.Rect(x, y, width, height)
+        self.text = text
+        self.checked = False
 
+    def draw(self):
+        pygame.draw.rect(screen, gray if not self.checked else white, self.rect, 0)
+        pygame.draw.rect(screen, black, self.rect, 1)
 
-def move(self):
-     for event in pygame.event.get():
-         if event.type == pygame.QUIT:
-             pygame.quit()
+        font = pygame.font.Font(None, 36)
+        text = font.render(self.text, True, black)
+        text_rect = text.get_rect(center=self.rect.center)
+        screen.blit(text, text_rect)
 
-             keys = pygame.key.get_pressed()
-
-             if keys[pygame.K_LEFT]:
-                 self.dirnx = 1
-                 self.dirny = 0
-             self.turns[self.head.pos[:]] = [self.dirnx, self.dirny]
-
-            elif keys[pygame.K_RIGHT]:
-                 self.dirnx = -1
-                 self.dirny = 0
-     self.turns[self.head.pos[:]] = [self.dirnx, self.dirny]
-
-        elif keys[pygame.K_UP]:
-                 self.dirnx = 0
-                 self.dirny = -1
-self.turns[self.head.pos [:]] = [self.dirnx, self.dirny]
-
-        elif keys[pygame.K_DOWN]
-                 self.dirnx = 0
-                 self.dirny = 1
-self.turns[self.head.pos [:]] = [self.dirnx, self.dirny]
-
-def reset(self, pos):
-        pass
-
- def add_cube(self):
-        pass
-
- def draw(self, surface):
-       pass
-
-def draw_grid(w, rows, surface):
-       size_between = w // rows
-
-       x = 0
-       y = 0
-       for l in range(rows):
-           x = x + size_between
-           y = y + size_between
-           pygame.draw.line(surface, (255, 255, 255), (x, 0), (x, w))
-           pygame.draw.line(surface, (255, 255, 255), (0, y), (w, y))
-
-def draw_window(surface):
-    surface.fill((0, 255, 0))
-    draw_grid(size, rows, surface)
-    pygame.display.update()
+    def toggle(self):
+        self.checked = not self.checked
 
 
+# Utwórz checkboxy
+checkbox1 = Checkbox(50, 50, 200, 50, "Checkbox 1")
+checkbox2 = Checkbox(50, 120, 200, 50, "Checkbox 2")
+checkbox3 = Checkbox(50, 190, 200, 50, "Checkbox 3")
 
-def main():
-    global size, rows
-    size = 800
-    rows = 20
-    window = pygame.display.set_mode((size, size))
+checkboxes = [checkbox1, checkbox2, checkbox3]
 
-    s = snake((0, 0, 0), (10, 10))
+# Główna pętla gry
+while True:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            sys.exit()
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            if event.button == 1:  # Kliknięcie lewego przycisku myszy
+                for checkbox in checkboxes:
+                    if checkbox.rect.collidepoint(event.pos):
+                        checkbox.toggle()
+                        if checkbox.checked:
+                            # Jeśli kliknięto checkbox, wyłącz pozostałe
+                            for other_checkbox in checkboxes:
+                                if other_checkbox != checkbox:
+                                    other_checkbox.checked = False
 
-    flag = True
-    Clock = pygame.time.Clock()
+    # Wypełnij tło
+    screen.fill(white)
 
-    while flag:
+    # Narysuj checkboxy
+    for checkbox in checkboxes:
+        checkbox.draw()
 
-                pygame.time.delay(50)
-                Clock.tick(10)
-                draw_window( window)
-main()
+    # Zaktualizuj okno
+    pygame.display.flip()
