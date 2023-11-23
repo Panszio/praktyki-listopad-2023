@@ -48,6 +48,7 @@ class SNAKE:
             color: ColorsEnum = ColorsEnum.BLUE,
     ):
 
+        self.is_alive = True
         self.cell_size = cell_size
         self.cell_number = cell_number
         self.screen = screen
@@ -81,6 +82,7 @@ class SNAKE:
         self.head = self.head_down
         self.tail  = self.tail_down
     def draw_snakes(self):
+        if self.is_alive == False: return
         self.update_head_graphic()
         self.update_tail_graphic()
 
@@ -109,6 +111,7 @@ class SNAKE:
                         self.screen.blit(self.body_tr, block_rect)
                     elif previous_block.x == 1 and next_block.y == 1 or previous_block.y == 1 and next_block.x == 1:
                         self.screen.blit(self.body_br, block_rect)
+
 
     def update_head_graphic(self):
         head_relation: Vector2 = self.body[1] - self.body[0]

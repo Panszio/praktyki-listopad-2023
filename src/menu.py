@@ -1,6 +1,5 @@
 import pygame
 import pygame_menu as pygameMenu
-from tkinter import *
 from sanke import game_loop
 from enum import Enum
 
@@ -9,6 +8,7 @@ SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Menu Główne")
+
 
 
 class Key_Bindings(Enum):
@@ -31,11 +31,11 @@ def start_menu():
     menu = pygameMenu.Menu(width=SCREEN_WIDTH, height=SCREEN_HEIGHT, title="Welcome in a snake Land!",
                             theme=pygameMenu.themes.THEME_BLUE)
 
-    menu.add.button("Play", game_loop)
+    menu.add.button("Choose Snake", checkbox_menu)
     menu.add.button("Key Binding", show_key_bindings_menu)
     menu.add.button("Quit", pygameMenu.events.EXIT)
 
-    current_menu = menu  # Ustaw aktualne menu
+    current_menu = menu
     menu.mainloop(screen)
 
 def show_key_bindings_menu():
@@ -50,10 +50,27 @@ def show_key_bindings_menu():
     current_menu = key_menu
     key_menu.mainloop(screen)
 
+def checkbox_menu():
+        global current_menu
+
+        Check_menu = pygameMenu.Menu(width=SCREEN_WIDTH, height=SCREEN_HEIGHT, title="Choose a SNAKE",
+                                     theme=pygameMenu.themes.THEME_BLUE)
+
+        Check_menu.add.toggle_switch('One Snake', state_text=('On', 'Off'), state=0)
+        Check_menu.add.toggle_switch('Two Snakes', state_text=('On', 'Off'), state=0)
+        Check_menu.add.toggle_switch('Three Snakes', state_text=('On', 'Off'), state=0)
+        Check_menu.add.toggle_switch('Four Snakes', state_text=('On', 'Off'), state=0)
+
+        Check_menu.add.button('Play', game_loop)
+
+        current_menu = Check_menu
+        Check_menu.mainloop(screen)
+
+        Check_menu.mainloop(screen)
 def show_previous_menu():
     global current_menu
     if current_menu is not None:
-        current_menu.set_attribute("return")  # Ustaw atrybut powrotu
+        current_menu.set_attribute("return")
     else:
         print("Current menu is None")
 

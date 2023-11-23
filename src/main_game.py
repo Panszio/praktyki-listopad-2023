@@ -1,5 +1,4 @@
 import pygame
-import sys
 
 
 
@@ -76,7 +75,7 @@ class MAIN_GAME:
             snake.move_snakes()
         self.check_collision()
         self.check_if_hit_himself()
-        self.check_fail()
+        self.kill_somebody()
 
     def draw_elements(self):
         self.draw_grass()
@@ -96,24 +95,36 @@ class MAIN_GAME:
                 self.fruit.randomize()
                 snake.points += 1
 
-    def check_fail(self):
-        return
-        # for snake in self.snakes:
-        #     if not 0 <= snake.body[0].x < self.cell_number or not 0 <= snake.body[0].y < self.cell_number:
-        #         print("nie żyje")
-        #         self.game_over()
+    def kill_somebody(self):
+        for index, snake in enumerate(self.snakes):
+            if snake.is_alive == False:
+                return
+
+
+                # print(f"nie żyje snake nr {index + 1}")
+
+
+
+
+
     def check_if_hit_himself(self):
-        for snake in self.snakes:
+        for index, snake in enumerate(self.snakes):
+            if snake.is_alive == False:
+                return
+
             head = snake.body[0]
             body = snake.body[1:]
             if head in body:
-                self.game_over()
+                end = snake.is_alive
+                print(end)
+                snake.is_alive = False
 
+                print(f"nie żyje snake nr {index + 1}")
     def game_over(self):
         # pygame.quit()
         # sys.exit()r
-        end = self.run = False
-        print(end)
+         self.run = False
+
 
     def draw_grass(self):
         for row in range(self.cell_number):
@@ -146,16 +157,7 @@ class MAIN_GAME:
             score_rect = score_surface.get_rect(center=(score_x, score_y))
             self.screen.blit(score_surface, score_rect)
 
-    run = True
 
-    while run:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                run = False
-    pygame.display.flip()
-
-    pygame.quit()
-    sys.exit()
 
 
 
